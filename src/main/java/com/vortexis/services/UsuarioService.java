@@ -3,6 +3,7 @@ package com.vortexis.services;
 import com.vortexis.entities.Usuario;
 import com.vortexis.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +13,16 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
+        usuario.setPassword(
+                passwordEncoder.encode(usuario.getPassword())
+        );
         return usuarioRepository.save(usuario);
     }
 
@@ -47,4 +52,6 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuario);
     }
+
+
 }
