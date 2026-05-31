@@ -3,6 +3,7 @@ import com.vortexis.entities.Categoria;
 import com.vortexis.entities.Producto;
 import com.vortexis.repositories.CategoriaRepository;
 import com.vortexis.repositories.ProductoRepository;
+import com.vortexis.repositories.ProveedorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class ProductoService {
 
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final ProveedorRepository proveedorRepository;
 
     public Producto guardar(Producto producto) {
         return productoRepository.save(producto);

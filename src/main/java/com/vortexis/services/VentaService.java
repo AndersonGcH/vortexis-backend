@@ -1,19 +1,17 @@
 package com.vortexis.services;
 
 import com.vortexis.dto.DetalleVentaRequestDTO;
+import com.vortexis.dto.ProductoMasVendidoDTO;
+import com.vortexis.dto.ReporteVentasDTO;
 import com.vortexis.dto.VentaRequestDTO;
-import com.vortexis.entities.DetalleVenta;
-import com.vortexis.entities.Producto;
-import com.vortexis.entities.Usuario;
-import com.vortexis.entities.Venta;
-import com.vortexis.repositories.ProductoRepository;
-import com.vortexis.repositories.UsuarioRepository;
-import com.vortexis.repositories.VentaRepository;
+import com.vortexis.entities.*;
+import com.vortexis.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,8 @@ public class VentaService {
     private final VentaRepository ventaRepository;
     private final ProductoRepository productoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final ClienteRepository clienteRepository;
+    private final DetalleVentaRepository detalleVentaRepository;
 
     @Transactional
     public Venta registrar(VentaRequestDTO dto) {
@@ -33,6 +33,9 @@ public class VentaService {
                 .findById(dto.getUsuarioId())
                 .orElseThrow(() ->
                         new RuntimeException("Usuario no encontrado"));
+
+        Cliente cliente = clienteRepository.findById(dto.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         List<DetalleVenta> detalles = new ArrayList<>();
 
@@ -43,6 +46,7 @@ public class VentaService {
         venta.setFecha(LocalDateTime.now());
         venta.setMetodoPago(dto.getMetodoPago());
         venta.setUsuario(usuario);
+        venta.setCliente(cliente);
 
         for (DetalleVentaRequestDTO item : dto.getDetalles()) {
 
@@ -100,6 +104,37 @@ public class VentaService {
         return ventaRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Venta no encontrada"));
+    }
+
+
+    public ReporteVentasDTO obtenerReporteVentas() {
+
+        Long cantidad = ventaRepository.contarVentas();
+
+        BigDecimal total = ventaRepository.sumarVentas();
+
+        BigDecimal promedio = BigDecimal.ZERO;
+
+        if(cantidad > 0) {
+
+            promedio = total.divide(
+                    BigDecimal.valueOf(cantidad),
+                    2,
+                    RoundingMode.HALF_UP
+            );
+        }
+
+        return new ReporteVentasDTO(
+                cantidad,
+                total,
+                promedio
+        );
+    }
+
+    public List<ProductoMasVendidoDTO> obtenerProductosMasVendidos() {
+
+        return detalleVentaRepository
+                .productosMasVendidos();
     }
 
 }

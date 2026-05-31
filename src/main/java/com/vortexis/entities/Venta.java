@@ -39,4 +39,8 @@ public class Venta {
             cascade = CascadeType.ALL
     )
     private List<DetalleVenta> detalles;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 }

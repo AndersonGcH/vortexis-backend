@@ -29,4 +29,7 @@ public class ProductoRequestDTO {
 
     @NotNull
     private Long categoriaId;
+
+    @NotNull
+    private Long proveedorId;
 }

@@ -7,7 +7,8 @@ import java.util.List;
 
 @Data
 public class VentaRequestDTO {
-
+    @NotNull
+    private Long clienteId;
     @NotNull
     private Long usuarioId;
 
