@@ -35,6 +35,7 @@ public class ProductoController {
                 .sku(dto.getSku())
                 .precio(dto.getPrecio())
                 .stock(dto.getStock())
+                .stockMinimo(dto.getStockMinimo())
                 .descripcion(dto.getDescripcion())
                 .activo(dto.getActivo())
                 .categoria(categoria)

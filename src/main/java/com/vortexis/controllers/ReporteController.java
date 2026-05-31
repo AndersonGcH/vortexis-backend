@@ -1,7 +1,9 @@
 package com.vortexis.controllers;
 
 import com.vortexis.dto.ProductoMasVendidoDTO;
+import com.vortexis.dto.ReporteInventarioDTO;
 import com.vortexis.dto.ReporteVentasDTO;
+import com.vortexis.services.ProductoService;
 import com.vortexis.services.VentaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ReporteController {
 
     private final VentaService ventaService;
+    private final ProductoService productoService;
 
     @GetMapping("/ventas")
     public ReporteVentasDTO ventas() {
@@ -28,5 +31,12 @@ public class ReporteController {
 
         return ventaService
                 .obtenerProductosMasVendidos();
+    }
+
+    @GetMapping("/inventario")
+    public ReporteInventarioDTO inventario() {
+
+        return productoService
+                .obtenerReporteInventario();
     }
 }

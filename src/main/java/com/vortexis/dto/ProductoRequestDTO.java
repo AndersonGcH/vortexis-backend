@@ -22,6 +22,10 @@ public class ProductoRequestDTO {
     @Min(0)
     private Integer stock;
 
+    @NotNull
+    @Min(0)
+    private Integer stockMinimo;
+
     private String descripcion;
 
     @NotNull

@@ -1,4 +1,5 @@
 package com.vortexis.services;
+import com.vortexis.dto.ReporteInventarioDTO;
 import com.vortexis.entities.Categoria;
 import com.vortexis.entities.Producto;
 import com.vortexis.repositories.CategoriaRepository;
@@ -30,5 +31,23 @@ public class ProductoService {
         return categoriaRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Categoría no encontrada"));
+    }
+
+    public ReporteInventarioDTO obtenerReporteInventario() {
+
+        Long totalProductos =
+                productoRepository.contarProductos();
+
+        Long stockTotal =
+                productoRepository.stockTotal();
+
+        Long stockBajo =
+                productoRepository.contarStockBajo();
+
+        return new ReporteInventarioDTO(
+                totalProductos,
+                stockTotal,
+                stockBajo
+        );
     }
 }
